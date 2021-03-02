@@ -156,7 +156,7 @@ regexp_string <- '#' string:(!'#' ('\\#' / .))+ '#'
 	%  \ -> \\
 	%  " -> \"
    re:replace(proplists:get_value(string, Node), "\"|\\\\", "\\\\&", [{return, binary}, global]),
-   "\">>)"]
+   "\"/utf8>>)"]
 `;
 
 quoted_string <- single_quoted_string / double_quoted_string
@@ -164,7 +164,7 @@ quoted_string <- single_quoted_string / double_quoted_string
   used_combinator(p_string),
   lists:flatten(["p_string(<<\"",
    escape_string(unicode:characters_to_list(proplists:get_value(string, Node))),
-   "\">>)"])
+   "\"/utf8>>)"])
 `;
 
 double_quoted_string <- '"' string:(!'"' ("\\\\" / '\\"' / .))* '"' ~;
@@ -177,7 +177,7 @@ case_insensitive_string <- target:(double_quoted_string / single_quoted_string) 
   Str = string:lowercase(proplists:get_value(string, proplists:get_value(target, Node))),
   lists:flatten(["p_case_insensitive(<<\"", 
     escape_string(unicode:characters_to_list(Str)),
-    "\">>)"])
+    "\"/utf8>>)"])
 `;
 
 character_class <- '[' characters:(!']' ('\\\\' . / !'\\\\' .))+ ']'
@@ -185,7 +185,7 @@ character_class <- '[' characters:(!']' ('\\\\' . / !'\\\\' .))+ ']'
   used_combinator(p_charclass),
   ["p_charclass(<<\"[",
    escape_string(unicode:characters_to_list(proplists:get_value(characters, Node))),
-   "]\">>)"]
+   "]\"/utf8>>)"]
 `;
 
 anything_symbol <- '.' ` used_combinator(p_anything), <<"p_anything()">> `;

@@ -306,7 +306,7 @@ end
 	%  \ -> \\
 	%  " -> \"
    re:replace(proplists:get_value(string, Node), "\"|\\\\", "\\\\&", [{return, binary}, global]),
-   "\">>)"]
+   "\"/utf8>>)"]
  end).
 
 -spec 'quoted_string'(input(), index()) -> parse_result().
@@ -315,7 +315,7 @@ end
   used_combinator(p_string),
   lists:flatten(["p_string(<<\"",
    escape_string(unicode:characters_to_list(proplists:get_value(string, Node))),
-   "\">>)"])
+   "\"/utf8>>)"])
  end).
 
 -spec 'double_quoted_string'(input(), index()) -> parse_result().
@@ -333,7 +333,7 @@ end
   Str = string:lowercase(proplists:get_value(string, proplists:get_value(target, Node))),
   lists:flatten(["p_case_insensitive(<<\"", 
     escape_string(unicode:characters_to_list(Str)),
-    "\">>)"])
+    "\"/utf8>>)"])
  end).
 
 -spec 'character_class'(input(), index()) -> parse_result().
@@ -342,7 +342,7 @@ end
   used_combinator(p_charclass),
   ["p_charclass(<<\"[",
    escape_string(unicode:characters_to_list(proplists:get_value(characters, Node))),
-   "]\">>)"]
+   "]\"/utf8>>)"]
  end).
 
 -spec 'anything_symbol'(input(), index()) -> parse_result().
